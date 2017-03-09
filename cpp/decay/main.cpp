@@ -10,38 +10,38 @@ T func(T t);
 template <typename T>
 auto ReturnDecayedValue(T t)
 {
-    return t;
+    return t;   // template type deduction rule(auto) is applied for the return type.
 }
 
 template <typename T>
 auto ReturnDecayedValue1(T t) -> decltype(t)
 {
-    return t;
+    return t;   // decltype deduction rule is applied for the return type.
 }
 
 template <typename T>
 decltype(auto) ReturnDecayedValue2(T t) // C++14 decltype(auto)
 {
-    return t;
+    return t;   // decltype deduction rule is applied for the return type.
 }
 
 
 template <typename T>
 auto ReturnDecayedValue3(T & t)
 {
-    return t;
+    return t;   // template type deduction rule(auto) is applied for the return type.
 }
 
 template <typename T>
 auto ReturnDecayedValue4(T & t) -> decltype(t)
 {
-    return t;
+    return t;   // decltype deduction rule is applied for the return type.
 }
 
 template <typename T>
 decltype(auto) ReturnDecayedValue5(T & t)   // C++14 decltype(auto)
 {
-    return t;
+    return t;   // decltype deduction rule is applied for the return type.
 }
 
 
@@ -133,7 +133,7 @@ int main() {
     static_assert(is_same<int (*) [3], decltype(ReturnDecayedValue2(aa))>::value, "");
     static_assert(is_same<int (*) (int), decltype(ReturnDecayedValue2(f))>::value, "");
 
-    // ???
+    // 
     static_assert(is_same<int *, decltype(ReturnDecayedValue1(a))>::value, "");
     static_assert(is_same<int (*) [3], decltype(ReturnDecayedValue1(aa))>::value, "");
     static_assert(is_same<int (*) (int), decltype(ReturnDecayedValue1(f))>::value, "");
