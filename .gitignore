@@ -18,3 +18,7 @@ cpp/decay/.vscode/.cmaketools.json
 cpp/enable_if/build
 
 cpp/enable_if/.vscode/.cmaketools.json
+
+cpp/Boost.Preprocessor/build
+
+cpp/Boost.Preprocessor/.vscode/.cmaketools.json
