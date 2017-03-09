@@ -6,3 +6,7 @@ cpp/integral_constant/.vscode/.cmaketools.json
 cpp/sizeof/build
 
 cpp/sizeof/.vscode/.cmaketools.json
+
+cpp/decltype/build
+
+cpp/decltype/.vscode/.cmaketools.json
