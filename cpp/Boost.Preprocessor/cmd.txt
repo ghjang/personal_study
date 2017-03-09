@@ -1,0 +1,5 @@
+g++ -P -E -I../../../../boost_1_63_0 -I.. ../0.basics.cpp
+g++ -P -E -I../../../../boost_1_63_0 -I.. ../1.function_overloading.cpp
+g++ -P -E -I../../../../boost_1_63_0 -I.. ../2.template_specialization.cpp
+g++ -P -E -I../../../../boost_1_63_0 -I.. ../3.matrix_typedef.cpp
+g++ -P -E -I../../../../boost_1_63_0 -I.. ../4.matrix_typedef_step_by_step.cpp
