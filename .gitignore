@@ -14,3 +14,7 @@ cpp/decltype/.vscode/.cmaketools.json
 cpp/decay/build
 
 cpp/decay/.vscode/.cmaketools.json
+
+cpp/enable_if/build
+
+cpp/enable_if/.vscode/.cmaketools.json
