@@ -7,18 +7,21 @@ template <typename T>
 T func(T t);
 
 
+// template type deduction rule(auto) is applied for the parameter.
 template <typename T>
 auto ReturnDecayedValue(T t)
 {
     return t;   // template type deduction rule(auto) is applied for the return type.
 }
 
+// template type deduction rule(auto) is applied for the parameter.
 template <typename T>
 auto ReturnDecayedValue1(T t) -> decltype(t)
 {
     return t;   // decltype deduction rule is applied for the return type.
 }
 
+// template type deduction rule(auto) is applied for the parameter.
 template <typename T>
 decltype(auto) ReturnDecayedValue2(T t) // C++14 decltype(auto)
 {
