@@ -10,3 +10,7 @@ cpp/sizeof/.vscode/.cmaketools.json
 cpp/decltype/build
 
 cpp/decltype/.vscode/.cmaketools.json
+
+cpp/decay/build
+
+cpp/decay/.vscode/.cmaketools.json
