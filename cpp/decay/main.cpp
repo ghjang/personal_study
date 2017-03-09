@@ -20,13 +20,26 @@ auto ReturnDecayedValue1(T t) -> decltype(t)
 }
 
 template <typename T>
-auto ReturnDecayedValue2(T & t)
+decltype(auto) ReturnDecayedValue2(T t) // C++14 decltype(auto)
+{
+    return t;
+}
+
+
+template <typename T>
+auto ReturnDecayedValue3(T & t)
 {
     return t;
 }
 
 template <typename T>
-auto ReturnDecayedValue3(T & t) -> decltype(t)
+auto ReturnDecayedValue4(T & t) -> decltype(t)
+{
+    return t;
+}
+
+template <typename T>
+decltype(auto) ReturnDecayedValue5(T & t)   // C++14 decltype(auto)
 {
     return t;
 }
@@ -116,14 +129,22 @@ int main() {
     static_assert(is_same<int (*) [3], decltype(ReturnDecayedValue1(aa))>::value, "");
     static_assert(is_same<int (*) (int), decltype(ReturnDecayedValue1(f))>::value, "");
 
-    // ???
     static_assert(is_same<int *, decltype(ReturnDecayedValue2(a))>::value, "");
     static_assert(is_same<int (*) [3], decltype(ReturnDecayedValue2(aa))>::value, "");
     static_assert(is_same<int (*) (int), decltype(ReturnDecayedValue2(f))>::value, "");
 
-    static_assert(is_same<int (&) [3], decltype(ReturnDecayedValue3(a))>::value, "");       // reference to 'int [3]'
-    static_assert(is_same<int (&) [2][3], decltype(ReturnDecayedValue3(aa))>::value, "");   // reference to 'int [2][3]'
-    static_assert(is_same<int (&) (int), decltype(ReturnDecayedValue3(f))>::value, "");     // reference to 'int (int)'
+    // ???
+    static_assert(is_same<int *, decltype(ReturnDecayedValue1(a))>::value, "");
+    static_assert(is_same<int (*) [3], decltype(ReturnDecayedValue1(aa))>::value, "");
+    static_assert(is_same<int (*) (int), decltype(ReturnDecayedValue1(f))>::value, "");
+
+    static_assert(is_same<int (&) [3], decltype(ReturnDecayedValue4(a))>::value, "");       // reference to 'int [3]'
+    static_assert(is_same<int (&) [2][3], decltype(ReturnDecayedValue4(aa))>::value, "");   // reference to 'int [2][3]'
+    static_assert(is_same<int (&) (int), decltype(ReturnDecayedValue4(f))>::value, "");     // reference to 'int (int)'
+
+    static_assert(is_same<int (&) [3], decltype(ReturnDecayedValue5(a))>::value, "");       // reference to 'int [3]'
+    static_assert(is_same<int (&) [2][3], decltype(ReturnDecayedValue5(aa))>::value, "");   // reference to 'int [2][3]'
+    static_assert(is_same<int (&) (int), decltype(ReturnDecayedValue5(f))>::value, "");     // reference to 'int (int)'
 
     return 0;
 }
