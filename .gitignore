@@ -33,3 +33,6 @@ cpp/ratio/build
 
 cpp/ratio/.vscode/.cmaketools.json
 
+cpp/initializer_list/build
+
+cpp/initializer_list/.vscode/.cmaketools.json
