@@ -27,5 +27,8 @@ node.js/google-translate-api/node_modules
 
 cpp/polymorphism/build
 
-
 cpp/polymorphism/.vscode/.cmaketools.json
+
+cpp/raito/build
+
+cpp/raito/.vscode/.cmaketools.json
