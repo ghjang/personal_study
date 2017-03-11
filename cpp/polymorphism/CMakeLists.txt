@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(polymorphism)
+project(polymorphism_test)
 
 set(BOOST_ROOT "../../../boost_1_63_0")
 find_package(Boost 1.63.0)
@@ -19,4 +19,4 @@ set(SOURCE_FILES
         static_polymorphism.h
         dynamic_polymorphism.h)
 
-add_executable(polymorphism ${SOURCE_FILES})
+add_executable(polymorphism_test ${SOURCE_FILES})
