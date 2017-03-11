@@ -22,3 +22,5 @@ cpp/enable_if/.vscode/.cmaketools.json
 cpp/Boost.Preprocessor/build
 
 cpp/Boost.Preprocessor/.vscode/.cmaketools.json
+
+node.js/google-translate-api/node_modules
