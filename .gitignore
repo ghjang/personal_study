@@ -24,3 +24,8 @@ cpp/Boost.Preprocessor/build
 cpp/Boost.Preprocessor/.vscode/.cmaketools.json
 
 node.js/google-translate-api/node_modules
+
+cpp/polymorphism/build
+
+
+cpp/polymorphism/.vscode/.cmaketools.json
