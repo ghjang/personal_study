@@ -40,3 +40,7 @@ cpp/initializer_list/.vscode/.cmaketools.json
 cpp/hanoi_tower/build
 
 cpp/hanoi_tower/.vscode/.cmaketools.json
+
+cpp/integer_sequence/build
+
+cpp/integer_sequence/.vscode/.cmaketools.json
