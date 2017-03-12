@@ -44,3 +44,7 @@ cpp/hanoi_tower/.vscode/.cmaketools.json
 cpp/integer_sequence/build
 
 cpp/integer_sequence/.vscode/.cmaketools.json
+
+cpp/tuple_cat/build
+
+cpp/tuple_cat/.vscode/.cmaketools.json
