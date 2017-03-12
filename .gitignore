@@ -36,3 +36,7 @@ cpp/ratio/.vscode/.cmaketools.json
 cpp/initializer_list/build
 
 cpp/initializer_list/.vscode/.cmaketools.json
+
+cpp/hanoi_tower/build
+
+cpp/hanoi_tower/.vscode/.cmaketools.json
