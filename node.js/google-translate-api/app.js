@@ -61,12 +61,12 @@ ${r.text}
                     );
                 };
             } catch (err) {
-                console.error('exception was thrown: ' + err);
+                console.error('exception was thrown(0): ' + err);
                 process.exit(1);
                 return;
             }
         }
     }
 }).catch(err => {
-    console.error('exception was thrown: ' + err);
+    console.error('exception was thrown(1): ' + err);
 });
