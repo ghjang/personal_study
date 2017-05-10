@@ -244,6 +244,9 @@ note: need to re-order the sub-order. re-think the algorithm.
 */
 
 /*
+- current index
+- element index to swap
+
 { 0, 1, 2, 3 }
 
 { 0, 1, 3, 2 }
@@ -286,4 +289,67 @@ note: need to re-order the sub-order. re-think the algorithm.
 { 3, 1, 0. 2 }
 
 { 3, 0, 1, 2 } <== complete
+*/
+
+
+//== revision
+/*
+{ 0, 1, <2, <3>> }
+
+{ 0, 1, <2, <3>> } <== complete
+
+{ 0, 1, <2, 3> }
+
+{ 0, 1, <3, <2>> }
+
+{ 0, 1, <3, <2>> } <== complete
+
+{ 0, <1, 2, 3> }
+
+{ 0, 3, 1, 2 }
+{ 0, 3, 2, 1 }
+{ 0, 2, 3, 1 }
+{ 0, 2, 1, 3 }
+
+{ 0, 1, 2, 3 } <== complete
+
+{ 0, 1, 2, 3 }
+
+{ 1, 0, 2, 3 }
+{ 1, 0, 3, 2 }
+{ 1, 3, 0, 2 }
+{ 1, 3, 2, 0 }
+{ 1, 2, 3, 0 }
+{ 1, 2, 0, 3 }
+
+{ 1, 0, 2, 3 } <== complete
+
+{ 1, 0, 2, 3 }
+
+{ 2, 0, 1, 3 }
+{ 2, 0, 3, 1 }
+{ 2, 3, 0, 1 }
+{ 2, 3, 1, 0 }
+{ 2, 1, 3, 0 }
+{ 2, 1, 0, 3 }
+
+{ 2, 0, 1, 3 } <== complete
+
+{ 2, 0, 1, 3 }
+
+{ 3, 0, 1, 2 }
+{ 3, 0, 2, 1 }
+{ 3, 2, 0, 1 }
+{ 3, 2, 1, 0 }
+{ 3, 1, 2, 0 }
+{ 3, 1, 0. 2 }
+
+{ 3, 0, 1, 2 } <== complete
+*/
+
+/*
+1. add the given sequence to the result.
+2. process until the completion condition.
+3. ignore the completion sequence.
+4. continue with the next swap.
 */
