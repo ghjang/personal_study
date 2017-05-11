@@ -48,3 +48,5 @@ cpp/integer_sequence/.vscode/.cmaketools.json
 cpp/tuple_cat/build
 
 cpp/tuple_cat/.vscode/.cmaketools.json
+
+cpp/permutation/build
