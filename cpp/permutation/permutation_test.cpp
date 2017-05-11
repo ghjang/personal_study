@@ -7,6 +7,27 @@
 #include <iostream>
 
 
+// NOTE: it's OK to pass std::array reference argument in constexpr contexts.
+constexpr void constexpr_array_reference_argument_impl(std::array<int, 5> & arr)
+{
+    arr[0] = 100;
+}
+
+constexpr auto constexpr_array_reference_argument()
+{
+    std::array<int, 5> arr{ 0, 1, 2, 3, 4 };
+    constexpr_array_reference_argument_impl(arr);
+    return arr;
+}
+
+TEST_CASE("constexpr std::array reference argument", "[permutation]")
+{
+    // it's OK.
+    constexpr auto arr = constexpr_array_reference_argument();
+    static_assert(arr[0] == 100);
+}
+
+
 TEST_CASE("std::next_permutation", "[permutation]")
 {
     std::string s = "abc";
@@ -78,6 +99,7 @@ TEST_CASE("bubble_reverse", "[permutation]")
 {
     std::cout << "==== bubble_reverse\n";
     std::array<int, 5> arr{ 0, 1, 2, 3, 4 };
+    std::copy(arr.begin(), arr.end(), std::ostream_iterator<int>(std::cout, " "));
     bubble_reverse(arr);
 }
 
