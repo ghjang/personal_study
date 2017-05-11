@@ -353,3 +353,19 @@ note: need to re-order the sub-order. re-think the algorithm.
 3. ignore the completion sequence.
 4. continue with the next swap.
 */
+
+
+    while (cnt < num_of_perm) {
+        if (sp < N - 1) {
+            ++sp;
+            stack[sp] = sp;
+        }
+        else if (N - 1 == sp) {
+            std::copy(seq.begin(), seq.end(), indices[cnt++].begin());
+
+            
+        }
+        else {
+            std::copy(seq.begin(), seq.end(), indices[cnt++].begin());
+        }
+    }
