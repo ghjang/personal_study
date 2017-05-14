@@ -369,3 +369,53 @@ note: need to re-order the sub-order. re-think the algorithm.
             std::copy(seq.begin(), seq.end(), indices[cnt++].begin());
         }
     }
+
+
+
+    for (auto k = j; k < N1; ++k) {
+        permutation_index_impl(seq, i + 1, i + 1, out, cnt);
+    }
+
+    // reversing the sub-sequence
+    for (auto k = i + 1; k < N1 - 1; ++k) {
+        for (auto l = N1 - 1; l > k; --l) {
+            std::swap(seq[k], seq[l]);
+            std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        }
+    }
+
+    std::copy(seq.begin(), seq.end(), out[cnt++].begin());
+    std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+
+
+
+
+template <std::size_t N1, std::size_t N2>
+void permutation_index_impl(std::array<int, N1> & seq, int i, int j,
+                            std::array<std::array<int, N1>, N2> & out,
+                            int & cnt)
+{
+    if (i == j) {
+        std::copy(seq.begin(), seq.end(), out[cnt++].begin());
+
+        std::cout << "temp1: ";
+        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+
+        return;
+    }
+
+    int k = i;
+    int l = i + 1;
+    for ( ; l <= j; ++l) {
+        permutation_index_impl(seq, i + 1, j, out, cnt);
+
+        std::swap(seq[k], seq[l]);
+
+        std::cout << "temp2: ";
+        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+    }
+
+    std::reverse(seq.begin() + i, seq.end());
+}

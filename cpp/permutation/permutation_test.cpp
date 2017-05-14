@@ -103,25 +103,30 @@ TEST_CASE("bubble_reverse", "[permutation]")
     bubble_reverse(arr);
 }
 
+
 template <std::size_t N1, std::size_t N2>
-void permutation_index_impl(std::array<int, N1> & seq, int i, int j,
+void permutation_index_impl(std::array<int, N1> seq, int i, int j,
                             std::array<std::array<int, N1>, N2> & out,
                             int & cnt)
 {
-    for (auto k = j; k < N1; ++k) {
-        permutation_index_impl(seq, i + 1, i + 1, out, cnt);
+    if (i == j) {
+        std::cout << "temp1: ";
+        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+        return;
     }
 
-    // reversing the sub-sequence
-    for (auto k = i + 1; k < N1 - 1; ++k) {
-        for (auto l = N1 - 1; l > k; --l) {
-            std::swap(seq[k], seq[l]);
-            std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
-        }
-    }
+    int k = i;
+    int l = i + 1;
+    for ( ; l <= j; ++l) {
+        permutation_index_impl(seq, i + 1, j, out, cnt);
 
-    std::copy(seq.begin(), seq.end(), out[cnt++].begin());
-    std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::swap(seq[k], seq[l]);
+
+        std::cout << "temp2: ";
+        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+    }
 }
 
 template <int N>
@@ -134,11 +139,11 @@ auto permutation_index()
     seq_t seq;
     std::iota(seq.begin(), seq.end(), 0);
 
-    constexpr auto num_of_perm = factorial(N);
-    std::array<seq_t, num_of_perm> indices{};
+    constexpr auto numOfPerm = factorial(N);
+    std::array<seq_t, numOfPerm * 2> indices{};
     int cnt = 0;
 
-    permutation_index_impl(seq, 0, 0, indices, cnt);
+    permutation_index_impl(seq, 0, seq.size() - 1, indices, cnt);
 
     return indices;
 }
@@ -148,6 +153,7 @@ struct TD;
 
 TEST_CASE("permutation_index", "[permutation]")
 {
+    /*
     std::cout << "==== perm-1:\n";
     auto i1 = permutation_index<1>();
     for (auto & p : i1) {
@@ -161,13 +167,47 @@ TEST_CASE("permutation_index", "[permutation]")
         std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
         std::cout << '\n';
     }
+    */
 
-/*
     std::cout << "==== perm-2:\n";
     auto i3 = permutation_index<3>();
+
+    /*
     for (auto & p : i3) {
         std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
         std::cout << '\n';
     }
-*/
+    */
+}
+
+
+template <std::size_t N>
+void print_permutation_index_impl(std::array<int, N> arr, int i, int j)
+{
+    if (i == j) {
+        std::copy(arr.begin(), arr.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+        return;
+    }
+
+    for (int k = i + 1; k <= N; ++k) {
+        print_permutation_index_impl(arr, i + 1, j);
+        if (k != N) {
+            std::swap(arr[i], arr[k]);
+        }
+    }
+}
+
+template <std::size_t N>
+void print_permutation_index()
+{
+    std::array<int, N> arr{};
+    std::iota(arr.begin(), arr.end(), 0);
+    print_permutation_index_impl(arr, 0, N - 1);
+}
+
+TEST_CASE("print_permutation_index", "[permutation]")
+{
+    std::cout << "//==== print_permutation_index\n";
+    print_permutation_index<4>();
 }
