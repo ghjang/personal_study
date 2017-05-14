@@ -190,11 +190,9 @@ void print_permutation_index_impl(std::array<int, N> arr, int i)
         return;
     }
 
-    for (int j = i + 1; j <= N; ++j) {
+    for (int j = i + 1, k = N - i; k > 0; ++j, --k) {
         print_permutation_index_impl(arr, i + 1);
-        if (j < N) {
-            std::swap(arr[i], arr[j]);
-        }
+        std::swap(arr[i], arr[j]);
     }
 }
 
