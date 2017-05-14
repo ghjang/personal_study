@@ -182,20 +182,21 @@ TEST_CASE("permutation_index", "[permutation]")
 
 
 template <std::size_t N>
-void print_permutation_index_impl(std::array<int, N> arr, int i, int j)
+bool print_permutation_index_impl(std::array<int, N> arr, int i)
 {
-    if (i == j) {
+    if (i == N - 1) {
         std::copy(arr.begin(), arr.end(), std::ostream_iterator<int>(std::cout, " "));
         std::cout << '\n';
-        return;
+        return false;
     }
 
-    for (int k = i + 1; k <= N; ++k) {
-        print_permutation_index_impl(arr, i + 1, j);
-        if (k != N) {
-            std::swap(arr[i], arr[k]);
+    for (int j = i + 1; j <= N; ++j) {
+        if (print_permutation_index_impl(arr, i + 1)) {
+            std::swap(arr[i], arr[j]);
         }
     }
+
+    return true;
 }
 
 template <std::size_t N>
@@ -203,7 +204,7 @@ void print_permutation_index()
 {
     std::array<int, N> arr{};
     std::iota(arr.begin(), arr.end(), 0);
-    print_permutation_index_impl(arr, 0, N - 1);
+    print_permutation_index_impl(arr, 0);
 }
 
 TEST_CASE("print_permutation_index", "[permutation]")
