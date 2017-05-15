@@ -143,10 +143,10 @@ constexpr auto permutation_index_impl(std::array<int, N> arr,
     if constexpr (i == N - 1) {
         indices[cnt++] = arr;
     } else {
-        int j = 0;
+        int j = i;
 
         if constexpr (i != N - 1) {
-            j = i + 1;
+            ++j;
         }
 
         for (int k = N - i; k > 0; --k) {
@@ -187,26 +187,11 @@ constexpr auto permutation_index()
 
 TEST_CASE("permutation_index", "[permutation]")
 {
-    /*
-    std::cout << "==== perm-1:\n";
-    auto i1 = permutation_index<1>();
-    for (auto & p : i1) {
-        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
+    std::cout << "==== permutation_index\n";
+    
+    constexpr auto indices = permutation_index<4>();
 
-    std::cout << "==== perm-2:\n";
-    auto i2 = permutation_index<2>();
-    for (auto & p : i2) {
-        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
-    */
-
-    std::cout << "==== perm-2:\n";
-    constexpr auto i3 = permutation_index<3>();
-
-    for (auto & p : i3) {
+    for (auto & p : indices) {
         std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
         std::cout << '\n';
     }
