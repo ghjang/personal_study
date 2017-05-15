@@ -250,16 +250,37 @@ constexpr auto det(T (& mat)[M][N])
     return det_impl<M, N>(mat);
 }
 
+template <typename T, std::size_t N, std::size_t M>
+constexpr auto det(std::array<std::array<T, N>, M> const & mat)
+{
+    return det_impl<M, N>(mat);
+}
+
 
 TEST_CASE("det", "[permutation]")
 {
+    //==== C++ built-in array ====
+
+    // compile-time calculation
     constexpr int mat[2][2] = { { 3, 0 },
                                 { 0, 2 } };
-
     static_assert(det(mat) == 6);
 
+    // runtime calculation
     int mat1[2][2] = { { 3, 0 },
                        { 0, 2 } };
-
     assert(det(mat1) == 6);
+
+    //==== std::array ====
+    using mat_t = std::array<std::array<int, 2>, 2>;
+
+    // compile-time calculation
+    constexpr mat_t mat2 = { { { 3, 0 },
+                               { 0, 2 } } };
+    static_assert(det(mat2) == 6);
+
+    // runtime calculation
+    mat_t mat3 = { { { 3, 0 },
+                     { 0, 2 } } };
+    assert(det(mat3) == 6);    
 }
