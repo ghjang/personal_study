@@ -1,5 +1,6 @@
 #include "catch.hpp"
 
+#include <cassert>
 #include <algorithm>
 #include <numeric>
 #include <array>
@@ -193,33 +194,49 @@ TEST_CASE("permutation_index", "[permutation]")
 }
 
 
-template <std::size_t N, typename T>
-constexpr auto term_sign(T & perm)
+template <typename T, std::size_t N, std::size_t M>
+constexpr auto term_sign(std::array<std::array<T, N>, M> const & perm)
 {
-    int reverseOrderCnt = 0;
-    for (int i = 0; i < N - 1; ++i) {
-        for (int j = i + 1; j < N; ++j) {
-            if (perm[i] > perm[j]) {
-                ++reverseOrderCnt;
+    std::array<int, M> signs{};
+
+    for (int i = 0; i < M; ++i) {
+        int reverseOrderCnt = 0;
+        auto & p = perm[i];
+        for (int j = 0; j < N - 1; ++j) {
+            for (int k = j + 1; k < N; ++k) {
+                if (p[j] > p[k]) {
+                    ++reverseOrderCnt;
+                }
             }
         }
+        signs[i] = (reverseOrderCnt % 2 == 0) ? 1 : -1;
     }
-    return (reverseOrderCnt % 2 == 0) ? 1 : -1;
+
+    return signs;
 }
 
-template <typename T, int M, int N>
-constexpr auto det(T (& mat)[M][N])
+template <int M, int N, typename T>
+constexpr auto det_impl(T & mat)
 {
     static_assert(M == N);
     static_assert(M >= 2 && N >= 2);
 
-    std::remove_const_t<T> v = 0;
+    using ret_t = std::remove_const_t<
+                        std::remove_reference_t<
+                                decltype(mat[0][0])
+                        >
+                  >;
+
+    ret_t v = 0;
 
     constexpr auto indices = permutation_index<N>();
-    for (auto & p : indices) {
-        int term = term_sign<N>(p);
-        for (int i = 0; i < p.size(); ++i) {
-            term *= mat[i][p[i]];
+    constexpr auto signs = term_sign(indices);
+
+    for (int i = 0; i < indices.size(); ++i) {
+        int term = signs[i];
+        auto & p = indices[i];
+        for (int j = 0; j < p.size(); ++j) {
+            term *= mat[j][p[j]];
         }
         v += term;
     }
@@ -227,10 +244,22 @@ constexpr auto det(T (& mat)[M][N])
     return v;
 }
 
+template <typename T, int M, int N>
+constexpr auto det(T (& mat)[M][N])
+{
+    return det_impl<M, N>(mat);
+}
+
+
 TEST_CASE("det", "[permutation]")
 {
-    constexpr int mat[][2] = { { 3, 0 },
-                               { 0, 2 } };
+    constexpr int mat[2][2] = { { 3, 0 },
+                                { 0, 2 } };
 
     static_assert(det(mat) == 6);
+
+    int mat1[2][2] = { { 3, 0 },
+                       { 0, 2 } };
+
+    assert(det(mat1) == 6);
 }
