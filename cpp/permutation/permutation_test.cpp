@@ -135,7 +135,7 @@ TEST_CASE("print_permutation_index", "[permutation]")
 
 
 template <std::size_t N, int i, std::size_t M>
-constexpr auto permutation_index_impl(std::array<int, N> arr,
+constexpr void permutation_index_impl(std::array<int, N> arr,
                                       std::integral_constant<int, i>,
                                       std::array<std::array<int, N>, M> & indices,
                                       int & cnt)
