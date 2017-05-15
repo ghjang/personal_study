@@ -104,83 +104,6 @@ TEST_CASE("bubble_reverse", "[permutation]")
 }
 
 
-template <std::size_t N1, std::size_t N2>
-void permutation_index_impl(std::array<int, N1> seq, int i, int j,
-                            std::array<std::array<int, N1>, N2> & out,
-                            int & cnt)
-{
-    if (i == j) {
-        std::cout << "temp1: ";
-        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-        return;
-    }
-
-    int k = i;
-    int l = i + 1;
-    for ( ; l <= j; ++l) {
-        permutation_index_impl(seq, i + 1, j, out, cnt);
-
-        std::swap(seq[k], seq[l]);
-
-        std::cout << "temp2: ";
-        std::copy(seq.begin(), seq.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
-}
-
-template <int N>
-auto permutation_index()
-{
-    static_assert(N > 0);
-
-    using seq_t = std::array<int, N>;
-
-    seq_t seq;
-    std::iota(seq.begin(), seq.end(), 0);
-
-    constexpr auto numOfPerm = factorial(N);
-    std::array<seq_t, numOfPerm * 2> indices{};
-    int cnt = 0;
-
-    permutation_index_impl(seq, 0, seq.size() - 1, indices, cnt);
-
-    return indices;
-}
-
-template <typename T>
-struct TD;
-
-TEST_CASE("permutation_index", "[permutation]")
-{
-    /*
-    std::cout << "==== perm-1:\n";
-    auto i1 = permutation_index<1>();
-    for (auto & p : i1) {
-        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
-
-    std::cout << "==== perm-2:\n";
-    auto i2 = permutation_index<2>();
-    for (auto & p : i2) {
-        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
-    */
-
-    std::cout << "==== perm-2:\n";
-    auto i3 = permutation_index<3>();
-
-    /*
-    for (auto & p : i3) {
-        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
-        std::cout << '\n';
-    }
-    */
-}
-
-
 template <std::size_t N>
 void print_permutation_index_impl(std::array<int, N> arr, int i)
 {
@@ -208,4 +131,83 @@ TEST_CASE("print_permutation_index", "[permutation]")
 {
     std::cout << "//==== print_permutation_index\n";
     print_permutation_index<3>();
+}
+
+
+template <std::size_t N, int i, std::size_t M>
+constexpr auto permutation_index_impl(std::array<int, N> arr,
+                                      std::integral_constant<int, i>,
+                                      std::array<std::array<int, N>, M> & indices,
+                                      int & cnt)
+{
+    if constexpr (i == N - 1) {
+        indices[cnt++] = arr;
+    } else {
+        int j = 0;
+
+        if constexpr (i != N - 1) {
+            j = i + 1;
+        }
+
+        for (int k = N - i; k > 0; --k) {
+            permutation_index_impl(arr, std::integral_constant<int, i + 1>{}, indices, cnt);
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            if (j + 1 == N) {
+                j = i;
+            } else {
+                ++j;
+            }
+        }
+    }
+}
+
+template <int N>
+constexpr auto permutation_index()
+{
+    static_assert(N > 0);
+
+    using arr_t = std::array<int, N>;
+
+    arr_t arr{};
+    for (int i = 0; i < arr.size(); ++i) {
+        arr[i] = i;
+    }
+
+    constexpr auto numOfPerm = factorial(N);
+    std::array<arr_t, numOfPerm> indices{};
+    int cnt = 0;
+
+    permutation_index_impl(arr, std::integral_constant<int, 0>{}, indices, cnt);
+
+    return indices;
+}
+
+
+TEST_CASE("permutation_index", "[permutation]")
+{
+    /*
+    std::cout << "==== perm-1:\n";
+    auto i1 = permutation_index<1>();
+    for (auto & p : i1) {
+        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+    }
+
+    std::cout << "==== perm-2:\n";
+    auto i2 = permutation_index<2>();
+    for (auto & p : i2) {
+        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+    }
+    */
+
+    std::cout << "==== perm-2:\n";
+    constexpr auto i3 = permutation_index<3>();
+
+    for (auto & p : i3) {
+        std::copy(p.begin(), p.end(), std::ostream_iterator<int>(std::cout, " "));
+        std::cout << '\n';
+    }
 }
