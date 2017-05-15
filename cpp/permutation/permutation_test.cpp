@@ -191,3 +191,46 @@ TEST_CASE("permutation_index", "[permutation]")
         std::cout << '\n';
     }
 }
+
+
+template <std::size_t N, typename T>
+constexpr auto term_sign(T & perm)
+{
+    int reverseOrderCnt = 0;
+    for (int i = 0; i < N - 1; ++i) {
+        for (int j = i + 1; j < N; ++j) {
+            if (perm[i] > perm[j]) {
+                ++reverseOrderCnt;
+            }
+        }
+    }
+    return (reverseOrderCnt % 2 == 0) ? 1 : -1;
+}
+
+template <typename T, int M, int N>
+constexpr auto det(T (& mat)[M][N])
+{
+    static_assert(M == N);
+    static_assert(M >= 2 && N >= 2);
+
+    std::remove_const_t<T> v = 0;
+
+    constexpr auto indices = permutation_index<N>();
+    for (auto & p : indices) {
+        int term = term_sign<N>(p);
+        for (int i = 0; i < p.size(); ++i) {
+            term *= mat[i][p[i]];
+        }
+        v += term;
+    }
+
+    return v;
+}
+
+TEST_CASE("det", "[permutation]")
+{
+    constexpr int mat[][2] = { { 3, 0 },
+                               { 0, 2 } };
+
+    static_assert(det(mat) == 6);
+}
