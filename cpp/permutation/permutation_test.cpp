@@ -143,12 +143,7 @@ constexpr auto permutation_index_impl(std::array<int, N> arr,
     if constexpr (i == N - 1) {
         indices[cnt++] = arr;
     } else {
-        int j = i;
-
-        if constexpr (i != N - 1) {
-            ++j;
-        }
-
+        int j = i + 1;
         for (int k = N - i; k > 0; --k) {
             permutation_index_impl(arr, std::integral_constant<int, i + 1>{}, indices, cnt);
             int temp = arr[i];
@@ -188,7 +183,7 @@ constexpr auto permutation_index()
 TEST_CASE("permutation_index", "[permutation]")
 {
     std::cout << "==== permutation_index\n";
-    
+
     constexpr auto indices = permutation_index<4>();
 
     for (auto & p : indices) {
