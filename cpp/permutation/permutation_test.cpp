@@ -232,6 +232,9 @@ constexpr auto det_impl(T & mat)
     constexpr auto indices = permutation_index<N>();
     constexpr auto signs = term_sign(indices);
 
+    // TODO: Is it possible to apply loop un-rolling by using  C++17 fold expression?
+    //          std::apply & constexpr functor?
+    //          need to introduce an impl object?
     for (int i = 0; i < indices.size(); ++i) {
         int term = signs[i];
         auto & p = indices[i];
@@ -256,6 +259,17 @@ constexpr auto det(std::array<std::array<T, N>, M> const & mat)
     return det_impl<M, N>(mat);
 }
 
+/*
+ * NOTE: The most generic version.
+ *        It will work OK only if the mat's size is M x N.
+ *        And the mat should provide 'operator []' for accessing the elements.
+ */
+template <int M, int N, typename T>
+constexpr auto det(T & mat)
+{
+    return det_impl<M, N>(mat);
+}
+
 
 TEST_CASE("det", "[permutation]")
 {
@@ -269,7 +283,7 @@ TEST_CASE("det", "[permutation]")
     // runtime calculation
     int mat1[2][2] = { { 3, 0 },
                        { 0, 2 } };
-    assert(det(mat1) == 6);
+    REQUIRE(det(mat1) == 6);
 
     //==== std::array ====
     using mat_t = std::array<std::array<int, 2>, 2>;
@@ -282,5 +296,42 @@ TEST_CASE("det", "[permutation]")
     // runtime calculation
     mat_t mat3 = { { { 3, 0 },
                      { 0, 2 } } };
-    assert(det(mat3) == 6);    
+    REQUIRE(det(mat3) == 6);
+
+    //==== std::vector ====
+    std::vector<std::vector<int>> mat4{ { 3, 0 },
+                                        { 0, 2 } };
+    REQUIRE(mat4.size() == 2);
+    REQUIRE(mat4[0][0] == 3);
+    REQUIRE(mat4[0][1] == 0);
+    REQUIRE(mat4[1][0] == 0);
+    REQUIRE(mat4[1][1] == 2);
+
+    // runtime calculation
+    REQUIRE((det<2, 2>(mat4) == 6));
+}
+
+
+struct functor
+{
+    template <typename... Int>
+    int operator () (Int... i)
+    {
+        return (sign_ * ... * f(i));
+    }
+
+    int f(int i)
+    {
+        return i * i;
+    }
+
+    int const sign_;
+};
+
+TEST_CASE("fold expression", "[permutation]")
+{
+    std::array<int, 5> arr;
+    std::iota(arr.begin(), arr.end(), 0);
+
+    std::apply(functor{ -1 }, arr); 
 }
