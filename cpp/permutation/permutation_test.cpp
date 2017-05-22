@@ -55,6 +55,30 @@ TEST_CASE("std::next_permutation", "[permutation]")
     REQUIRE(3 == cnt);
 }
 
+struct functor
+{
+    template <typename... Int>
+    int operator () (Int... i)
+    {
+        return (sign_ * ... * f(i));
+    }
+
+    int f(int i)
+    {
+        return i * i;
+    }
+
+    int const sign_;
+};
+
+TEST_CASE("fold expression with functor", "[permutation]")
+{
+    std::array<int, 5> arr;
+    std::iota(arr.begin(), arr.end(), 0);
+
+    std::apply(functor{ -1 }, arr); 
+}
+
 
 constexpr auto factorial(int n)
 {
@@ -330,29 +354,4 @@ TEST_CASE("det", "[permutation]")
 
     // runtime calculation
     REQUIRE((det<2, 2>(mat4) == 6));
-}
-
-
-struct functor
-{
-    template <typename... Int>
-    int operator () (Int... i)
-    {
-        return (sign_ * ... * f(i));
-    }
-
-    int f(int i)
-    {
-        return i * i;
-    }
-
-    int const sign_;
-};
-
-TEST_CASE("fold expression", "[permutation]")
-{
-    std::array<int, 5> arr;
-    std::iota(arr.begin(), arr.end(), 0);
-
-    std::apply(functor{ -1 }, arr); 
 }
