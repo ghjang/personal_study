@@ -239,28 +239,27 @@ constexpr auto term_sign(std::array<std::array<T, N>, M> const & perm)
     return signs;
 }
 
-template <int M, int N>
+template <int MatrixSize>
 struct det_impl
 {
-    static_assert(M == N);
-    static_assert(M >= 2 && N >= 2);
+    static_assert(MatrixSize >= 2);
 
-    constexpr static auto indices_ = permutation_index<N>();
+    constexpr static auto indices_ = permutation_index<MatrixSize>();
     constexpr static auto signs_ = term_sign(indices_);
 
     template <typename T>
     struct multiply
     {
-        template <typename U, U... i, typename... Int>
-        constexpr auto mul_impl(std::integer_sequence<U, i...>, Int... p) const
+        template <typename U, U... m, typename... Int>
+        constexpr auto mul_impl(std::integer_sequence<U, m...>, Int... n) const
         {
-            return (sign_ * ... * mat_[i][p]);
+            return (sign_ * ... * mat_[m][n]);
         }
 
         template <typename... Int>
-        constexpr auto operator () (Int... p) const
+        constexpr auto operator () (Int... n) const
         {
-            return mul_impl(std::index_sequence_for<Int...>{}, p...);
+            return mul_impl(std::index_sequence_for<Int...>{}, n...);
         }
 
         T & mat_;
@@ -270,16 +269,16 @@ struct det_impl
     template <typename T>
     struct add
     {
-        template <typename U, U... i, typename... PermIndex>
-        constexpr auto add_impl(std::integer_sequence<U, i...>, PermIndex &... index) const
+        template <typename U, U... i, typename... Permutation>
+        constexpr auto add_impl(std::integer_sequence<U, i...>, Permutation &... p) const
         {
-            return (... + std::apply(multiply<T>{ mat_, signs_[i] }, index));
+            return (... + std::apply(multiply<T>{ mat_, signs_[i] }, p));
         }
 
-        template <typename... PermIndex>
-        constexpr auto operator () (PermIndex &... index) const
+        template <typename... Permutation>
+        constexpr auto operator () (Permutation &... p) const
         {
-            return add_impl(std::index_sequence_for<PermIndex...>{}, index...);
+            return add_impl(std::index_sequence_for<Permutation...>{}, p...);
         }
 
         T & mat_;
@@ -292,16 +291,16 @@ struct det_impl
     }
 };
 
-template <typename T, int M, int N>
-constexpr auto det(T (& mat)[M][N])
+template <typename T, int M>
+constexpr auto det(T (& mat)[M][M])
 {
-    return det_impl<M, N>{}(mat);
+    return det_impl<M>{}(mat);
 }
 
-template <typename T, std::size_t N, std::size_t M>
-constexpr auto det(std::array<std::array<T, N>, M> const & mat)
+template <typename T, std::size_t M>
+constexpr auto det(std::array<std::array<T, M>, M> const & mat)
 {
-    return det_impl<M, N>{}(mat);
+    return det_impl<M>{}(mat);
 }
 
 /*
@@ -309,10 +308,10 @@ constexpr auto det(std::array<std::array<T, N>, M> const & mat)
  *        It will work OK only if the mat's size is M x N.
  *        And the mat should provide 'operator []' for accessing the elements.
  */
-template <int M, int N, typename T>
+template <int M, typename T>
 constexpr auto det(T & mat)
 {
-    return det_impl<M, N>{}(mat);
+    return det_impl<M>{}(mat);
 }
 
 
@@ -353,5 +352,5 @@ TEST_CASE("det", "[permutation]")
     REQUIRE(mat4[1][1] == 2);
 
     // runtime calculation
-    REQUIRE((det<2, 2>(mat4) == 6));
+    REQUIRE((det<2>(mat4) == 6));
 }
