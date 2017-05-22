@@ -215,48 +215,69 @@ constexpr auto term_sign(std::array<std::array<T, N>, M> const & perm)
     return signs;
 }
 
-template <int M, int N, typename T>
-constexpr auto det_impl(T & mat)
+template <int M, int N>
+struct det_impl
 {
     static_assert(M == N);
     static_assert(M >= 2 && N >= 2);
 
-    using ret_t = std::remove_const_t<
-                        std::remove_reference_t<
-                                decltype(mat[0][0])
-                        >
-                  >;
+    constexpr static auto indices_ = permutation_index<N>();
+    constexpr static auto signs_ = term_sign(indices_);
 
-    ret_t v = 0;
-
-    constexpr auto indices = permutation_index<N>();
-    constexpr auto signs = term_sign(indices);
-
-    // TODO: Is it possible to apply loop un-rolling by using  C++17 fold expression?
-    //          std::apply & constexpr functor?
-    //          need to introduce an impl object?
-    for (int i = 0; i < indices.size(); ++i) {
-        int term = signs[i];
-        auto & p = indices[i];
-        for (int j = 0; j < p.size(); ++j) {
-            term *= mat[j][p[j]];
+    template <typename T>
+    struct multiply
+    {
+        template <typename U, U... i, typename... Int>
+        constexpr auto mul_impl(std::integer_sequence<U, i...>, Int... p) const
+        {
+            return (sign_ * ... * mat_[i][p]);
         }
-        v += term;
-    }
 
-    return v;
-}
+        template <typename... Int>
+        constexpr auto operator () (Int... p) const
+        {
+            return mul_impl(std::index_sequence_for<Int...>{}, p...);
+        }
+
+        T & mat_;
+        int sign_;
+    };
+
+    template <typename T>
+    struct add
+    {
+        template <typename U, U... i, typename... PermIndex>
+        constexpr auto add_impl(std::integer_sequence<U, i...>, PermIndex &... index) const
+        {
+            return (... + std::apply(multiply<T>{ mat_, signs_[i] }, index));
+        }
+
+        template <typename... PermIndex>
+        constexpr auto operator () (PermIndex &... index) const
+        {
+            return add_impl(std::index_sequence_for<PermIndex...>{}, index...);
+        }
+
+        T & mat_;
+    };
+
+    template <typename T>
+    constexpr auto operator () (T & mat) const
+    {
+        return std::apply(add<T>{ mat }, indices_);
+    }
+};
 
 template <typename T, int M, int N>
 constexpr auto det(T (& mat)[M][N])
 {
-    return det_impl<M, N>(mat);
+    return det_impl<M, N>{}(mat);
 }
 
 template <typename T, std::size_t N, std::size_t M>
 constexpr auto det(std::array<std::array<T, N>, M> const & mat)
 {
-    return det_impl<M, N>(mat);
+    return det_impl<M, N>{}(mat);
 }
 
 /*
@@ -267,7 +288,7 @@ constexpr auto det(std::array<std::array<T, N>, M> const & mat)
 template <int M, int N, typename T>
 constexpr auto det(T & mat)
 {
-    return det_impl<M, N>(mat);
+    return det_impl<M, N>{}(mat);
 }
 
 
