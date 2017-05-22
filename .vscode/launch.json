@@ -1,7 +1,14 @@
 {
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "C++ LLDB Launch",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/cpp/permutation/build/permutation_test",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
         {
             "name": "C++ Launch",
             "type": "cppdbg",
