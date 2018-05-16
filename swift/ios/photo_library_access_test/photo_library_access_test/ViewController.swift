@@ -44,6 +44,8 @@ class ViewController: UIViewController
                                               completion: {
                                                 (pickedImage) in
                                                     self.m_photoImageView.image = pickedImage
+                                                
+                                                    // NOTE: can't get the image URL.
                                               })
     }
     
@@ -57,6 +59,8 @@ class ViewController: UIViewController
                                                         self.m_avPlayer?.replaceCurrentItem(with: AVPlayerItem(url: url as URL))
                                                         self.m_avPlayer?.play()
                                                     }
+                                                
+                                                    // NOTE: Is the returned URL always valid?
                                               })
     }
 
