@@ -30,11 +30,25 @@
                                 <rect key="frame" x="67" y="20" width="240" height="245"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g83-lN-VXG">
+                                <rect key="frame" x="137" y="356" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Select a Movie"/>
+                                <connections>
+                                    <action selector="selectMovieButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mVf-e8-Pua"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gq8-hV-nv0">
+                                <rect key="frame" x="67" y="412" width="240" height="220"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="m_moviePlayerView" destination="gq8-hV-nv0" id="A4x-yA-6xx"/>
                         <outlet property="m_photoImageView" destination="F8I-GB-3mO" id="0Cb-sY-bRT"/>
                     </connections>
                 </viewController>

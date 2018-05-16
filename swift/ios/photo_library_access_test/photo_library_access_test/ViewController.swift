@@ -1,20 +1,28 @@
-//
-//  ViewController.swift
-//  photo_library_access_test
-//
-//  Created by Gil Ho Jang on 17/05/2018.
-//  Copyright © 2018 Gil Ho Jang. All rights reserved.
-//
-
 import UIKit
+import AVKit
 
-class ViewController: UIViewController {
+
+// NOTE: This example is for iOS 10.x and above.
+
+
+class ViewController: UIViewController
+{
 
     @IBOutlet var m_photoImageView: UIImageView!
+    @IBOutlet var m_moviePlayerView: UIView!
     
-    override func viewDidLoad() {
+    var m_avPlayer: AVPlayer?
+    
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
+
+        self.m_avPlayer = AVPlayer()
+        let layer = AVPlayerLayer(player: self.m_avPlayer)
+        layer.frame = self.m_moviePlayerView.bounds
+        self.m_moviePlayerView.layer.addSublayer(layer)
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,14 +39,25 @@ class ViewController: UIViewController {
         CameraHandler.shared.showActionSheet(vc: self)
         */
         
-        PhotoSelector.shared.select(presentor: self,
-                                    from: .photoLibrary,
-                                    completion: {
-                                        (pickedImageUrl) in
-                                            if let imgData = NSData(contentsOf: pickedImageUrl as URL) {
-                                                self.m_photoImageView.image = UIImage(data: imgData as Data)
-                                            }
-                                    })
+        ImagePickerHandler.shared.selectPhoto(presentor: self,
+                                              from: .photoLibrary,
+                                              completion: {
+                                                (pickedImage) in
+                                                    self.m_photoImageView.image = pickedImage
+                                              })
     }
     
+    @IBAction func selectMovieButtonTouched(_ sender: UIButton)
+    {
+        ImagePickerHandler.shared.selectMovie(presentor: self,
+                                              from: .photoLibrary,
+                                              completion: {
+                                                (pickedMovieUrl) in
+                                                    if let url = pickedMovieUrl {
+                                                        self.m_avPlayer?.replaceCurrentItem(with: AVPlayerItem(url: url as URL))
+                                                        self.m_avPlayer?.play()
+                                                    }
+                                              })
+    }
+
 }
