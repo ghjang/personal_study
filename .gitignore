@@ -79,3 +79,5 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+swift/console/hello_swift/hello
