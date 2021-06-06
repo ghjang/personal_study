@@ -81,3 +81,5 @@ fastlane/test_output
 iOSInjectionProject/
 
 swift/console/hello_swift/hello
+*.bak
+*.orig
