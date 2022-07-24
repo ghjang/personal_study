@@ -52,11 +52,11 @@ CREATE OR REPLACE TYPE XS IS TABLE OF NUMBER;
 -- 사용자 정의 타입 'XS'를 사용해 '구구단' 출력
 WITH factors AS ( 
 	SELECT
-		xs.column_value AS a,
-		ys.column_value AS b
+		xs.column_value AS a
+	  , ys.column_value AS b
 	FROM
 		XS(2, 3, 4, 5, 6, 7, 8, 9) xs
-	   ,XS(1, 2, 3, 4, 5, 6, 7, 8, 9) ys
+	  , XS(1, 2, 3, 4, 5, 6, 7, 8, 9) ys
 )
 SELECT LISTAGG(
 			f.a || 'x' || f.b || '=' || f.a * f.b,
