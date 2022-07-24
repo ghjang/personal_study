@@ -19,7 +19,10 @@ SELECT DISTINCT LISTAGG(f.a || 'x' || f.b || '=' || f.a * f.b, '      ')
 FROM fs f;
 
 
--- 위의 쿼리에서 'DISTINCT'와 'PARTITION BY' 절을 제거함.
+/*
+	위의 쿼리에서 'DISTINCT'와 'PARTITION BY' 절을 제거하고
+	'GROUP BY' 절을 추가하여 결과를 출력하였다.
+*/
 WITH xs AS (
 	SELECT (LEVEL + 1) AS n
 	FROM DUAL
