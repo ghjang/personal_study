@@ -64,3 +64,25 @@ SELECT LISTAGG(
         ) WITHIN GROUP(ORDER BY f.a)
 FROM factors f
 GROUP BY f.b;
+
+
+/*
+    'LISTAGG'의 구분자 인수를 사용하지 않고
+    'RPAD' 함수를 이용해서 적당한 출력폭을 지정함.
+
+    NOTE: '12'는 '구구단'에서 가장 긴 문자열의 '2배' 길이이다.
+            ex.> 9x9=81     <== 6자
+*/
+WITH factors AS ( 
+	SELECT
+		xs.column_value AS a
+	  , ys.column_value AS b
+	FROM
+		XS(2, 3, 4, 5, 6, 7, 8, 9) xs
+	  , XS(1, 2, 3, 4, 5, 6, 7, 8, 9) ys
+)
+SELECT LISTAGG(
+			RPAD(f.a || 'x' || f.b || '=' || f.a * f.b, 12)
+		) WITHIN GROUP(ORDER BY f.a)
+FROM factors f
+GROUP BY f.b;
