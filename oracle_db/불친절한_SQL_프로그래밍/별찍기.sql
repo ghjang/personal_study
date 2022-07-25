@@ -74,7 +74,7 @@ BEGIN
     SELECT LPAD('*', LEVEL, '*')
     BULK COLLECT INTO retVal
     FROM DUAL
-    CONNECT BY LEVEL < 10;
+    CONNECT BY LEVEL <= bottomWidth;
 
     RETURN retVal;
 END;
