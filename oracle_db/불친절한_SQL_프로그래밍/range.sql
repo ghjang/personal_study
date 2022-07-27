@@ -27,3 +27,7 @@ BEGIN
 
     RETURN retVal;
 END;
+
+
+-- 'RANGE' 함수를 좀더 짧게 적어 사용하기 위해서 추가함.
+CREATE SYNONYM R FOR RANGE;
