@@ -1,0 +1,5 @@
+-- 'NUMBER' 리스트 생성용 타입 'XS'를 생성
+CREATE OR REPLACE TYPE XS IS TABLE OF NUMBER;
+
+-- '문자열' 리스트 생성용 타입 'CS'를 생성
+CREATE OR REPLACE TYPE CS IS TABLE OF VARCHAR2(256);

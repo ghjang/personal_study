@@ -45,10 +45,6 @@ FROM fs f
 GROUP BY f.b;
 
 
--- 'NUMBER' 리스트 생성용 타입 'XS'를 생성
-CREATE OR REPLACE TYPE XS IS TABLE OF NUMBER;
-
-
 -- 사용자 정의 타입 'XS'를 사용해 '구구단' 출력
 WITH factors AS ( 
     SELECT
