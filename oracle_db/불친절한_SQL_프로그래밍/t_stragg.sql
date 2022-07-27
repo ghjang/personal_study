@@ -1,18 +1,18 @@
 -- 't_stragg' OBJECT 타입 생성
 CREATE OR REPLACE TYPE t_stragg AS OBJECT (
 	g_str VARCHAR2(32767)
-	
-  , STATIC FUNCTION odciaggregateinitialize(sctx IN OUT t_stragg) RETURN NUMBER
-  
-  , MEMBER FUNCTION odciaggregateiterate(self IN OUT t_stragg) RETURN NUMBER
-  
-  , MEMBER FUNCTION odciaggregateterminate(
+
+  , STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT t_stragg) RETURN NUMBER
+
+  , MEMBER FUNCTION ODCIAggregateIterate(self IN OUT t_stragg, value IN VARCHAR2) RETURN NUMBER
+
+  , MEMBER FUNCTION ODCIAggregateTerminate(
   								self IN t_stragg
-  							  , returnvalue OUT VARCHAR2
+  							  , retVal OUT VARCHAR2
   							  , flags IN NUMBER
   					) RETURN NUMBER
-  					
-  , MEMBER FUNCTION odciaggregatemerge(
+
+  , MEMBER FUNCTION ODCIAggregateMerge(
   								self IN OUT t_stragg
   							  , sctx2 IN t_stragg
   					) RETURN NUMBER
@@ -22,14 +22,14 @@ CREATE OR REPLACE TYPE t_stragg AS OBJECT (
 -- 't_stragg' OBJECT 타입내 선언된 함수 본문 정의
 CREATE OR REPLACE TYPE BODY t_stragg
 IS
-  STATIC FUNCTION odciaggregateinitialize(sctx IN OUT t_stragg) RETURN NUMBER
+  STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT t_stragg) RETURN NUMBER
   IS
   BEGIN
 	 sctx := t_stragg(NULL);
 	 RETURN ODCICONST.SUCCESS;
   END;
 
-  MEMBER FUNCTION odciaggregateiterate(self IN OUT t_stragg) RETURN NUMBER
+  MEMBER FUNCTION ODCIAggregateIterate(self IN OUT t_stragg, value IN VARCHAR2) RETURN NUMBER
   IS
   BEGIN
 	  IF (g_str IS NOT NULL) THEN
@@ -41,18 +41,18 @@ IS
 	  RETURN ODCICONST.SUCCESS;
   END;
 
-  MEMBER FUNCTION odciaggregateterminate(
+  MEMBER FUNCTION ODCIAggregateTerminate(
 							self IN t_stragg
-						  , returnvalue OUT VARCHAR2
+						  , retVal OUT VARCHAR2
 						  , flags IN NUMBER
   				  ) RETURN NUMBER
   IS
   BEGIN
-	  returnvalue := g_str;
+	  retVal := g_str;
 	  RETURN ODCICONST.SUCCESS;
   END;
 
-  MEMBER FUNCTION odciaggregatemerge(
+  MEMBER FUNCTION ODCIAggregateMerge(
 							self IN OUT t_stragg
 						  , sctx2 IN t_stragg
   				  ) RETURN NUMBER
@@ -67,6 +67,6 @@ IS
 END;
 
 
--- 'stragg' aggregate function 생성
+-- 't_stragg' OBJECT 타입을 사용하여 'stragg' 함수 정의
 CREATE OR REPLACE FUNCTION stragg(value IN VARCHAR2) RETURN VARCHAR2
 PARALLEL_ENABLE AGGREGATE USING t_stragg;
