@@ -19,7 +19,7 @@ BEGIN
     END IF;
 
     -- NOTE: 'FUNCTION' 내부에서 'WITH 절'을 사용해 그 하위에 'NEXT_ARITHMETIC_N'을 정의할 수 없다(?).
-    -- FIXME: 아래의 중복된 NEXT_ARITHMETIC_N 함수 호출을 제거하는 방법을 찾아볼 것.
+    -- FIXME: 아래의 중복된 NEXT_ARITHMETIC_N 함수 호출을 제거하는 방법을 찾아볼 것. 필요하다면 'PL/SQL'의 'FOR LOOP' 같은 것을 이용해 변경할 것.
 
     IF rStart <= rEnd THEN
         SELECT NEXT_ARITHMETIC_N(rStart, diff, LEVEL - 1)
