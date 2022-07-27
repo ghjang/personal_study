@@ -82,3 +82,11 @@ SELECT LISTAGG(
 		) WITHIN GROUP(ORDER BY f.a)
 FROM factors f
 GROUP BY f.b;
+
+
+-- 'RANGE' 함수를 사용해서 '구구단' 출력
+SELECT LISTAGG(
+			RPAD(a.n || 'x' || b.n || '=' || a.n * b.n, 12)
+		) WITHIN GROUP(ORDER BY a.n)
+FROM R(2, 9) a, R(1, 9) b
+GROUP BY b.n;
