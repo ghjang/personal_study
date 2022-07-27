@@ -6,29 +6,32 @@ BEGIN
 END;
 
 
---
-CREATE OR REPLACE FUNCTION RANGE(rStart IN INTEGER, rEnd IN INTEGER, step IN INTEGER DEFAULT 1) RETURN XS
+-- 'rStart'와 'rEnd' 사이의 '등차수열'을 리턴
+CREATE OR REPLACE FUNCTION RANGE(rStart IN INTEGER, rEnd IN INTEGER, diff IN INTEGER DEFAULT 1) RETURN XS
 IS
-    invalid_range EXCEPTION;
-    invalid_step_value EXCEPTION;
-    PRAGMA EXCEPTION_INIT(invalid_range, -20000);   -- NOTE: '-20000'과 '-20999' 사이의 값을 지정해야한다.
-    PRAGMA EXCEPTION_INIT(invalid_step_value, -20001);
+    invalid_diff_value EXCEPTION;
+    PRAGMA EXCEPTION_INIT(invalid_diff_value, -20000);   -- NOTE: '-20000'과 '-20999' 사이의 값을 지정해야한다.
 
     retVal XS;
 BEGIN
-    IF rStart >= rEnd THEN
-        raise_application_error(-20000, 'Invalid range');
-    END IF;
-
-    IF step <= 0 THEN
-        raise_application_error(-20001, 'Invalid step value');
+    IF diff <= 0 THEN
+        raise_application_error(-20000, 'diff must be greater than 0');
     END IF;
 
     -- NOTE: 'FUNCTION' 내부에서 'WITH 절'을 사용해 그 하위에 'NEXT_ARITHMETIC_N'을 정의할 수 없다(?).
-    SELECT NEXT_ARITHMETIC_N(rStart, step, LEVEL - 1)
-    BULK COLLECT INTO retVal
-    FROM DUAL
-    CONNECT BY NEXT_ARITHMETIC_N(rStart, step, LEVEL - 1) < rEnd;
+    -- FIXME: 아래의 중복된 NEXT_ARITHMETIC_N 함수 호출을 제거하는 방법을 찾아볼 것.
+
+    IF rStart <= rEnd THEN
+        SELECT NEXT_ARITHMETIC_N(rStart, diff, LEVEL - 1)
+        BULK COLLECT INTO retVal
+        FROM DUAL
+        CONNECT BY NEXT_ARITHMETIC_N(rStart, diff, LEVEL - 1) <= rEnd;
+    ELSE
+        SELECT NEXT_ARITHMETIC_N(rStart, -diff, LEVEL - 1)
+        BULK COLLECT INTO retVal
+        FROM DUAL
+        CONNECT BY NEXT_ARITHMETIC_N(rStart, -diff, LEVEL - 1) >= rEnd;
+    END IF;
 
     RETURN retVal;
 END;
