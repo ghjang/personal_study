@@ -1,0 +1,119 @@
+-- '예시 데이터 모델' 테이블 삭제
+DROP TABLE 부서    CASCADE CONSTRAINTS PURGE;
+DROP TABLE 사원    CASCADE CONSTRAINTS PURGE;
+DROP TABLE 협력업체 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 고객    CASCADE CONSTRAINTS PURGE;
+DROP TABLE 개인고객 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 법인고객 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 고객등급 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 상품    CASCADE CONSTRAINTS PURGE;
+DROP TABLE 상품가격 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 할인쿠폰 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 판매통계 CASCADE CONSTRAINTS PURGE;
+DROP TABLE 주문    CASCADE CONSTRAINTS PURGE;
+DROP TABLE 주문상세 CASCADE CONSTRAINTS PURGE;
+
+
+-- '예시 데이터 모델' 테이블 생성
+CREATE TABLE 부서 (
+      부서번호 NUMBER NOT NULL
+    , 부서명 VARCHAR2(10) NOT NULL
+    , 상위부서번호 NUMBER
+    , CONSTRAINTS PK_부서 PRIMARY KEY (부서번호)
+    , CONSTRAINTS FK_부서_상위부서번호 FOREIGN KEY (상위부서번호) REFERENCES 부서 (부서번호)
+);
+
+CREATE TABLE 사원 (
+      사원번호 NUMBER NOT NULL
+    , 사원명 VARCHAR2(10) NOT NULL
+    , 급여 NUMBER NOT NULL
+    , 소속부서번호 NUMBER NOT NULL
+    , CONSTRAINTS PK_사원 PRIMARY KEY (사원번호)
+    , CONSTRAINTS FK_사원_소속부서번호 FOREIGN KEY (소속부서번호) REFERENCES 부서 (부서번호)
+);
+
+CREATE TABLE 협력업체 (
+      업체번호 NUMBER NOT NULL
+    , 업체명 VARCHAR2(10) NOT NULL
+    , CONSTRAINTS PK_협력업체 PRIMARY KEY (업체번호)
+);
+
+CREATE TABLE 고객 (
+      고객번호 NUMBER NOT NULL
+    , 고객명 VARCHAR2(10) NOT NULL
+    , 고객유형 VARCHAR2(10) NOT NULL
+    , CONSTRAINTS PK_고객 PRIMARY KEY (고객번호)
+);
+
+CREATE TABLE 개인고객 (
+      고객번호 NUMBER NOT NULL
+    , 주민번호 VARCHAR2(13) NOT NULL
+    , CONSTRAINTS PK_개인고객 PRIMARY KEY (고객번호)
+    , CONSTRAINTS UK_개인고객_주민번호 UNIQUE (주민번호)
+    , CONSTRAINTS FK_개인고객_고객번호 FOREIGN KEY (고객번호) REFERENCES 고객 (고객번호)
+);
+
+CREATE TABLE 법인고객 (
+      고객번호 NUMBER NOT NULL
+    , 법인번호 VARCHAR2(13) NOT NULL
+    , CONSTRAINTS PK_법인고객 PRIMARY KEY (고객번호)
+    , CONSTRAINTS UK_법인고객_법인번호 UNIQUE (법인번호)
+    , CONSTRAINTS FK_법인고객_고객번호 FOREIGN KEY (고객번호) REFERENCES 고객 (고객번호)
+);
+
+CREATE TABLE 상품 (
+      상품코드 VARCHAR2(10) NOT NULL
+    , 상품명 VARCHAR2(10) NOT NULL
+    , 기획담당사번 NUMBER NOT NULL
+    , 구매담당사번 NUMBER
+    , 구매담당업체 NUMBER
+    , 관련부서목록 VARCHAR2(50) NOT NULL
+    , CONSTRAINTS PK_상품 PRIMARY KEY (상품코드)
+);
+
+CREATE TABLE 상품가격 (
+      상품코드 VARCHAR2(10) NOT NULL
+    , 시작일자 DATE NOT NULL
+    , 종료일자 DATE NOT NULL
+    , 상품가격 NUMBER NOT NULL
+    , CONSTRAINTS PK_상품가격 PRIMARY KEY (상품코드, 시작일자)
+    , CONSTRAINTS FK_상품가격_상품코드 FOREIGN KEY (상품코드) REFERENCES 상품 (상품코드)
+);
+
+CREATE TABLE 할인쿠폰 (
+      쿠폰코드 VARCHAR2(10) NOT NULL
+    , 발행일자 DATE NOT NULL
+    , 만료일자 DATE NOT NULL
+    , 할인비율 NUMBER NOT NULL
+    , 대상상품코드 VARCHAR2(10) NOT NULL
+    , CONSTRAINTS PK_할인쿠폰 PRIMARY KEY (쿠폰코드)
+    , CONSTRAINTS FK_할인쿠폰_대상상품코드 FOREIGN KEY (대상상품코드) REFERENCES 상품 (상품코드)
+);
+
+CREATE TABLE 주문 (
+      주문번호 NUMBER NOT NULL
+    , 주문일자 DATE NOT NULL
+    , 주문고객번호 NUMBER NOT NULL
+    , CONSTRAINTS PK_주문 PRIMARY KEY (주문번호)
+    , CONSTRAINTS FK_주문_주문고객번호 FOREIGN KEY (주문고객번호) REFERENCES 고객 (고객번호)
+);
+
+CREATE TABLE 주문상세 (
+      주문번호 NUMBER NOT NULL
+    , 상품코드 VARCHAR2(10) NOT NULL
+    , 주문수량 NUMBER NOT NULL
+    , CONSTRAINTS PK_주문상세 PRIMARY KEY (주문번호, 상품코드)
+    , CONSTRAINTS FK_주문상세_주문번호 FOREIGN KEY (주문번호) REFERENCES 주문 (주문번호)
+    , CONSTRAINTS FK_주문상세_상품코드 FOREIGN KEY (상품코드) REFERENCES 상품 (상품코드)
+);
+
+CREATE TABLE 판매통계 (
+      상품코드 VARCHAR2(10) NOT NULL
+    , 기준연월 VARCHAR2(6) NOT NULL
+    , 판매수량 NUMBER NOT NULL
+    , 판매금액 NUMBER NOT NULL
+    , CONSTRAINTS PK_판매통계 PRIMARY KEY (상품코드, 기준연월)
+);
+
+
+-- '예시 데이터 모델' 데이터 삽입
