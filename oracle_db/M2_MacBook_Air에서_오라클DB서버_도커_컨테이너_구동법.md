@@ -47,3 +47,22 @@
     ```zsh
     colima stop
     ```
+
+---
+
+## 기타 참고사항
+
+- 'Docker Desktop'을 실행해 기본 도커 런타임을 통해서 'docker' 커맨드 툴을 사용하고자 했으나 다음과 같은 'colima' 런타임 관련 오류가 발생할 수 있음:
+
+    ```zsh
+    > docker image ls
+    Cannot connect to the Docker daemon at unix:///Users/ghjang/.colima/default/docker.sock. Is the docker daemon running?
+    ```
+
+    이런 경우에는 다음 커맨드를 실행해서 'default' 런타임을 'Docker Desktop'으로 변경해주고 다시 실행하면 됨:
+
+    ```zsh
+    docker context use default
+    ```
+
+    참고로 'colima' 런타임 실행시 'docker' 커맨드의 컨텐스트가 자동으로 'colima' 쪽으로 변경되어 실행될 것임.
