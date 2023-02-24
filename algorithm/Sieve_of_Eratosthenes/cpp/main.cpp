@@ -1,37 +1,14 @@
-#include <vector>
-#include <iostream>
+#include <catch2/catch_test_macros.hpp>
+
+#include "sieve_of_eratosthenes.h"
 
 
-int main() {
-    int const n = 100;
+TEST_CASE("Sieve of Eratosthenes", "[detail][simple_get]" ) {
+    auto primes = sieve_of_eratosthenes::detail::simple_get(100);
 
-    std::vector<bool> v(n, true);
+    decltype(primes) expectedPrimes = {
+            2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
+    };
 
-    v[0] = false;   // '0' is not a prime number.
-    v[1] = false;   // '1' is not a prime number.
-
-    for (int i = 2; i < n; ++i) {
-        // move to the next prime number.
-        for (int j = i; j < n; ++j) {
-            if (v[j]) {
-                i = j;
-                break;
-            }
-        }
-
-        // mark all multiples of the current prime number as non-prime.
-        for (int j = i + 1; j < n; ++j) {
-            if (j % i == 0) {
-                v[j] = false;
-            }
-        }
-    }
-
-    for (int i = 0; i < n; ++i) {
-        if (v[i]) {
-            std::cout << i << " ";
-        }
-    }
-
-    return 0;
+    REQUIRE(primes == expectedPrimes);
 }
