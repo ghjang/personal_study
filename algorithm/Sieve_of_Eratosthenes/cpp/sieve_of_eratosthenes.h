@@ -10,6 +10,7 @@ namespace sieve_of_eratosthenes {
 
     namespace detail {
         std::vector<int> simple_get(unsigned int upperLimitN);
+        std::vector<int> optimized_get(unsigned int upperLimitN);
     }
 } // namespace sieve_of_eratosthenes
 

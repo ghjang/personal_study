@@ -11,6 +11,7 @@ add_executable(
         sieve_of_eratosthenes.h
         get_impl.cpp
         01_simple_get.cpp
+        02_optimized_get.cpp
 )
 
 target_link_libraries(cpp PRIVATE Catch2::Catch2WithMain)

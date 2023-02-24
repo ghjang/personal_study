@@ -12,3 +12,12 @@ TEST_CASE("Sieve of Eratosthenes", "[detail][simple_get]" ) {
 
     REQUIRE(primes == expectedPrimes);
 }
+
+TEST_CASE("Sieve of Eratosthenes", "[detail][optimized_get]" ) {
+    using namespace sieve_of_eratosthenes::detail;
+    REQUIRE(simple_get(100) == optimized_get(100));
+    REQUIRE(simple_get(150) == optimized_get(150));
+    REQUIRE(simple_get(200) == optimized_get(200));
+    REQUIRE(simple_get(777) == optimized_get(777));
+    REQUIRE(simple_get(1000) == optimized_get(1000));
+}
